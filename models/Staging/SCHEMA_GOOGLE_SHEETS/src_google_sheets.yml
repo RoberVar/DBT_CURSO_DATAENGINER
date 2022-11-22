@@ -27,11 +27,11 @@ sources:
             tests:
             - not_null
             - relationships:
-                to: ref('sql_server_dbo','product_id')
+                to: source('sql_server_dbo','product_id')
                 field: product_id          
           - name: quantity
             tests:
-            - positive_values
+            - dbt_utils.expression_is_true
           - name: month
           - name: _fivetran_synced
 		  

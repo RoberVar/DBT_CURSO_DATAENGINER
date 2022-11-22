@@ -131,7 +131,7 @@ sources:
             description: ""
             tests:
             - not_null
-            - positive_values  
+            - dbt_utils.expression_is_true
           - name: _fivetran_deleted
             description: ""
           - name: _fivetran_synced
@@ -169,7 +169,7 @@ sources:
           - name: shipping_cost
             description: ""
             tests:
-            - positive_values
+            - dbt_utils.expression_is_true
           - name: address_id
             description: ""
             tests:
@@ -184,7 +184,7 @@ sources:
           - name: order_total
             description: ""
             tests:
-            - positive_values
+            - dbt_utils.expression_is_true
           - name: user_id
             description: ""
             tests:
@@ -209,7 +209,7 @@ sources:
           - name: price
             description: ""
             tests:
-            - positive_values
+            - dbt_utils.expression_is_true
           - name: name
             description: ""
             tests:
@@ -229,7 +229,7 @@ sources:
           - name: discount
             description: ""
             tests:
-            - positive_values
+            - dbt_utils.expression_is_true
           - name: status
             description: ""
             tests:
