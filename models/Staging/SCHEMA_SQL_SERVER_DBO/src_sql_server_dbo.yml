@@ -1,0 +1,280 @@
+version: 2
+
+sources:
+
+  - name: sql_server_dbo
+    schema: SQL_SERVER_DBO # this is the schema our raw data lives in
+    database: |  
+        {%- if  target.name == 'user_dev' -%} dev_bronze_db_alumno15 
+        {%- elif target.name == 'ci' -%} dev_bronze_db_alumno15 
+        {%- elif target.name == 'pro'-%} pro_bronze_db_alumno15  
+        {%- else -%} {{target.database}}_bronze_db_alumno15
+        {%- endif -%}
+
+    tables:
+      - name: addresses
+        columns:
+          - name: address_id
+            description: ""
+            tests:
+            - unique
+            - not_null
+          - name: country
+            description: ""          
+            tests:
+            - not_null
+          - name: state
+            description: ""          
+            tests:
+            - not_null
+          - name: zipcode
+            description: ""
+            tests:
+            - not_null
+          - name: address
+            description: ""          
+            tests:
+            - not_null
+          - name: _fivetran_deleted
+            description: ""
+          - name: _fivetran_synced
+            description: ""
+
+      - name: events
+        columns:
+          - name: event_id
+            description: ""          
+            tests:
+            - unique
+            - not_null
+          - name: product_id
+            description: ""
+            tests:
+            - not_null
+            - relationships:
+                to: source('sql_server_dbo','products')
+                field: product_id
+          - name: created_at
+            description: ""
+            tests:
+            - not_null                 
+          - name: page_url
+            description: ""
+            tests:
+            - not_null                 
+          - name: event_type
+            description: ""
+            tests:
+            - not_null                 
+          - name: order_id
+            description: ""
+          - name: user_id
+            description: ""
+            tests:
+            - not_null
+            - relationships:
+                to: source('sql_server_dbo','users')
+                field: user_id
+          - name: session_id
+            description: ""
+            tests:
+            - not_null                 
+          - name: _fivetran_deleted
+            description: ""
+          - name: _fivetran_synced
+            description: ""
+
+      - name: fivetran_audit
+        columns:
+          - name: id
+            description: ""
+          - name: message
+            description: ""
+          - name: update_started
+            description: ""
+          - name: update_id
+            description: ""
+          - name: schema
+            description: ""
+          - name: table
+            description: ""
+          - name: start
+            description: ""
+          - name: done
+            description: ""
+          - name: rows_updated_or_inserted
+            description: ""
+          - name: status
+            description: ""
+          - name: progress
+            description: ""
+          - name: _fivetran_synced
+            description: ""
+
+      - name: order_items
+        columns:
+          - name: order_id
+            description: ""
+            tests:
+            - not_null
+            - relationships:
+                to: source('sql_server_dbo','orders')
+                field: order_id                       
+          - name: product_id
+            description: ""
+            tests:
+            - not_null
+            - relationships:
+                to: source('sql_server_dbo','products')
+                field: product_id  
+          - name: quantity
+            description: ""
+            tests:
+            - not_null
+            - positive_values  
+          - name: _fivetran_deleted
+            description: ""
+          - name: _fivetran_synced
+            description: ""
+
+      - name: orders
+        columns:
+          - name: order_id
+            description: ""
+            tests:
+            - unique
+            - not_null
+            - relationships:
+                to: source('sql_server_dbo','order_items')
+                field: order_id       
+          - name: delivered_at
+            description: ""
+          - name: order_cost
+            description: ""
+          - name: shipping_service
+            description: ""
+          - name: promo_id
+            description: ""
+            tests:
+            - not_null
+            - relationships:
+                to: source('sql_server_dbo','promos')
+                field: promo_id              
+          - name: estimated_delivery_at
+            description: ""
+          - name: tracking_id
+            description: ""
+            tests:
+            - unique
+          - name: shipping_cost
+            description: ""
+            tests:
+            - positive_values
+          - name: address_id
+            description: ""
+            tests:
+            - not_null
+            - relationships:
+                to: source('sql_server_dbo','users')
+                field: address_id              
+          - name: status
+            description: ""
+          - name: created_at
+            description: ""
+          - name: order_total
+            description: ""
+            tests:
+            - positive_values
+          - name: user_id
+            description: ""
+            tests:
+            - not_null
+            - relationships:
+                to: source('sql_server_dbo','users')
+                field: user_id              
+          - name: _fivetran_deleted
+            description: ""
+          - name: _fivetran_synced
+            description: ""
+
+      - name: products
+        columns:
+          - name: product_id
+            description: ""
+            tests:
+            - unique
+            - not_null            
+          - name: inventory
+            description: ""
+          - name: price
+            description: ""
+            tests:
+            - positive_values
+          - name: name
+            description: ""
+            tests:
+            - not_null
+          - name: _fivetran_deleted
+            description: ""
+          - name: _fivetran_synced
+            description: ""
+
+      - name: promos
+        columns:
+          - name: promo_id
+            description: ""
+            tests:
+            - unique
+            - not_null            
+          - name: discount
+            description: ""
+            tests:
+            - positive_values
+          - name: status
+            description: ""
+            tests:
+            - not_null
+          - name: _fivetran_deleted
+            description: ""
+          - name: _fivetran_synced
+            description: ""
+
+      - name: users
+        columns:
+          - name: user_id
+            description: ""
+            tests:
+            - unique
+            - not_null            
+          - name: address_id
+            description: ""
+            tests:
+            - not_null            
+            - unique
+            - relationships:
+                to: source('sql_server_dbo','addresses')
+                field: address_id              
+          - name: first_name
+            description: ""
+            tests:
+            - not_null              
+          - name: email
+            description: ""
+          - name: created_at
+            description: ""
+            tests:
+            - not_null  
+          - name: last_name
+            description: ""
+            tests:
+            - not_null              
+          - name: updated_at
+            description: ""
+          - name: phone_number
+            description: ""
+          - name: total_orders
+            description: ""
+          - name: _fivetran_deleted
+            description: ""
+          - name: _fivetran_synced
+            description: ""

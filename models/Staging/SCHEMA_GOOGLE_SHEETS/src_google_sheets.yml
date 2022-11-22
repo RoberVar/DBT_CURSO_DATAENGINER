@@ -1,0 +1,37 @@
+version: 2
+
+sources:
+
+  - name: google_sheets # name of the source 
+    schema: google_sheets # this is the schema our raw data lives in
+    database: |  
+        {%- if  target.name == 'user_dev' -%} dev_bronze_db_alumno15 
+        {%- elif target.name == 'ci' -%} dev_bronze_db_alumno15 
+        {%- elif target.name == 'pro'-%} pro_bronze_db_alumno15  
+        {%- else -%} {{target.database}}_bronze_db_alumno15
+        {%- endif -%}
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    tables:
+      - name: budget
+        columns:
+          - name: _row
+            tests:
+            - unique
+            - not_null
+          - name: product_id
+            tests:
+            - not_null
+            - relationships:
+                to: ref('sql_server_dbo','product_id')
+                field: product_id          
+          - name: quantity
+            tests:
+            - positive_values
+          - name: month
+          - name: _fivetran_synced
+		  
