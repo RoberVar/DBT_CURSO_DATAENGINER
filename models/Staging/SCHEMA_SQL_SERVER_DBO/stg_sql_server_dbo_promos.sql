@@ -1,24 +1,22 @@
 {{
   config(
      materialized='incremental',
-     unique_key = 'address_id'
+     unique_key = 'promo_id'
   )
 }}
 
 with source as (
 
-    select * from {{ source('sql_server_dbo', 'addresses') }}
+    select * from {{ source('sql_server_dbo', 'promos') }}
 
 ),
 
 renamed as (
 
     select
-        address_id,
-        country,
-        state,
-        zipcode,
-        address,
+        promo_id,
+        discount,
+        status,
         _fivetran_deleted,
         _fivetran_synced
 

@@ -1,6 +1,7 @@
 {{
   config(
-    materialized='table'
+     materialized='incremental',
+     unique_key = 'event_id'
   )
 }}
 

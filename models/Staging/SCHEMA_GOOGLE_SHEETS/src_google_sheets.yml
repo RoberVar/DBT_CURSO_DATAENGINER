@@ -4,7 +4,12 @@ sources:
 
   - name: google_sheets # name of the source 
     schema: google_sheets # this is the schema our raw data lives in
-    database: DEV_BRONZE_DB_ALUMNO15 # this is the name of our database
+    database: |  
+        {%- if  target.name == 'user_dev' -%} dev_bronze_db_alumno15 
+        {%- elif target.name == 'ci' -%} dev_bronze_db_alumno15 
+        {%- elif target.name == 'pro'-%} pro_bronze_db_alumno15  
+        {%- else -%} {{target.database}}_bronze_db_alumno15
+        {%- endif -%}
 
     quoting:
       database: false
@@ -22,7 +27,7 @@ sources:
             tests:
             - not_null
             - relationships:
-                to: ref('stg_products')
+                to: ref('sql_server_dbo','product_id')
                 field: product_id          
           - name: quantity
             tests:

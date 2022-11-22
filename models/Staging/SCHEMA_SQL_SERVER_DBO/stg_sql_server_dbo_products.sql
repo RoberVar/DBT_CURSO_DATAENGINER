@@ -1,24 +1,23 @@
 {{
   config(
      materialized='incremental',
-     unique_key = 'address_id'
+     unique_key = 'product_id'
   )
 }}
 
 with source as (
 
-    select * from {{ source('sql_server_dbo', 'addresses') }}
+    select * from {{ source('sql_server_dbo', 'products') }}
 
 ),
 
 renamed as (
 
     select
-        address_id,
-        country,
-        state,
-        zipcode,
-        address,
+        product_id,
+        inventory,
+        price,
+        name,
         _fivetran_deleted,
         _fivetran_synced
 
