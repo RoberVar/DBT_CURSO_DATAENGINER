@@ -22,12 +22,18 @@ renamed as (
         last_name,
         updated_at,
         phone_number,
-        total_orders,
+        total_orders, 
         _fivetran_deleted,
         _fivetran_synced
 
     from source
-
+    
 )
 
 select * from renamed
+
+{% if is_incremental() %}
+
+  where _fivetran_synced > (select max(_fivetran_synced) from {{ this }})
+
+{% endif %}

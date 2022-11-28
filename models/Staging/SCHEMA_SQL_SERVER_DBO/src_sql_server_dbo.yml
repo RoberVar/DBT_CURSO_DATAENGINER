@@ -130,8 +130,9 @@ sources:
           - name: quantity
             description: ""
             tests:
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
             - not_null
-            - dbt_utils.expression_is_true
           - name: _fivetran_deleted
             description: ""
           - name: _fivetran_synced
@@ -151,6 +152,9 @@ sources:
             description: ""
           - name: order_cost
             description: ""
+            tests:
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: shipping_service
             description: ""
           - name: promo_id
@@ -169,7 +173,8 @@ sources:
           - name: shipping_cost
             description: ""
             tests:
-            - dbt_utils.expression_is_true
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: address_id
             description: ""
             tests:
@@ -184,7 +189,8 @@ sources:
           - name: order_total
             description: ""
             tests:
-            - dbt_utils.expression_is_true
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: user_id
             description: ""
             tests:
@@ -206,10 +212,14 @@ sources:
             - not_null            
           - name: inventory
             description: ""
+            tests:
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: price
             description: ""
             tests:
-            - dbt_utils.expression_is_true
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: name
             description: ""
             tests:
@@ -229,7 +239,8 @@ sources:
           - name: discount
             description: ""
             tests:
-            - dbt_utils.expression_is_true
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: status
             description: ""
             tests:

@@ -31,7 +31,8 @@ sources:
                 field: product_id          
           - name: quantity
             tests:
-            - dbt_utils.expression_is_true
+              - dbt_utils.expression_is_true:
+                  expression: ">= 0"
           - name: month
           - name: _fivetran_synced
 		  
