@@ -1,6 +1,6 @@
 {{
   config(
-     materialized='table',
+     materialized='view',
      unique_key = 'promo_id'
   )
 }}
@@ -14,11 +14,11 @@ with source as (
 renamed as (
 
     select
-        promo_id,
-        discount,
-        status,
-        _fivetran_deleted,
-        _fivetran_synced
+        ,promo_id
+        ,discount
+        ,status
+        ,_fivetran_deleted
+        ,_fivetran_synced
 
     from source
 

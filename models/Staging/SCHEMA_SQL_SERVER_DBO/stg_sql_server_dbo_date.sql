@@ -17,7 +17,8 @@ with date as (
 
 
 select
-      date_day as fecha_forecast
+    time::time as real_time 
+    , date_day as fecha_forecast
     , year(date_day)*10000+month(date_day)*100+day(date_day) as id_date
     , year(date_day) as anio
     , month(date_day) as mes

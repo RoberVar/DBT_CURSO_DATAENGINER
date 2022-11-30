@@ -49,11 +49,6 @@ sources:
             - not_null
           - name: product_id
             description: ""
-            tests:
-            - not_null
-            - relationships:
-                to: source('sql_server_dbo','products')
-                field: product_id
           - name: created_at
             description: ""
             tests:
@@ -159,17 +154,10 @@ sources:
             description: ""
           - name: promo_id
             description: ""
-            tests:
-            - not_null
-            - relationships:
-                to: source('sql_server_dbo','promos')
-                field: promo_id              
           - name: estimated_delivery_at
             description: ""
           - name: tracking_id
             description: ""
-            tests:
-            - unique
           - name: shipping_cost
             description: ""
             tests:
@@ -180,7 +168,7 @@ sources:
             tests:
             - not_null
             - relationships:
-                to: source('sql_server_dbo','users')
+                to: source('sql_server_dbo','address')
                 field: address_id              
           - name: status
             description: ""
@@ -261,7 +249,6 @@ sources:
             description: ""
             tests:
             - not_null            
-            - unique
             - relationships:
                 to: source('sql_server_dbo','addresses')
                 field: address_id              
