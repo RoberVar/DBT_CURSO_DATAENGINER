@@ -14,7 +14,8 @@ with source as (
 renamed as (
 
     select
-        ,promo_id
+        md5(promo_id) as promo_id
+        ,trim(promo_id) as description
         ,discount
         ,status
         ,_fivetran_deleted
@@ -25,3 +26,11 @@ renamed as (
 )
 
 select * from renamed
+
+union all select
+        md5('')
+        ,'no_promo'
+        ,0
+        ,'inactive'
+        ,'false'
+        ,sysdate()

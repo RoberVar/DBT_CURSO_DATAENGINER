@@ -14,7 +14,7 @@ with source as (
 renamed as (
 
     select
-        address_id
+        trim(address_id) as address_id
         ,country
         ,state
         ,zipcode

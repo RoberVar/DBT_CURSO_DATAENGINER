@@ -18,7 +18,7 @@ renamed_casted AS (
     SELECT
         u.user_id
         , count(order_id) as orders_by_user
-        , sum(order_total_USD) as total_user_cost_USD
+        , cast(sum(total_cost_USD) as number(8,2)) as total_user_cost_USD
         , max(o.created_at) as last_ordered
         , min(o.created_at) as first_ordered
 

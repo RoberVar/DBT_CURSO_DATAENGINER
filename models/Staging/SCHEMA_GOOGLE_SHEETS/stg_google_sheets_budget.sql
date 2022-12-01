@@ -1,5 +1,5 @@
 {{ config(
-    materialized='incremental',
+    materialized='view',
     unique_key = '_row'
     ) 
     }}
@@ -12,17 +12,12 @@ WITH stg_budget_products AS (
 
 renamed_casted AS (
     SELECT
-          _row
+          md5(_row) as budget_id
         , month
-        , quantity 
+        , quantity
+        , product_id
         , _fivetran_synced
     FROM stg_budget_products
     )
 
 SELECT * FROM renamed_casted
-
-{% if is_incremental() %}
-
-  where _fivetran_synced > (select max(_fivetran_synced) from {{ this }})
-
-{% endif %}
