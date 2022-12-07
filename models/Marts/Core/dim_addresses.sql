@@ -5,7 +5,7 @@ WITH dim_addresses AS (
 
 renamed_casted AS (
     select
-        address_id unique
+        address_id
         ,country
         ,state
         ,zipcode

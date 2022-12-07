@@ -5,16 +5,12 @@ WITH dim_order_items AS (
 
 renamed_casted AS (
     SELECT
-        user_id unique
-        , first_name
-        , last_name
-        , email
-        , phone_number
-        , created_at_utc
-        , updated_at_utc
-        , address_id
-        , date_load
-    FROM stg_sql_server_dbo_order_items
+        order_id
+        ,product_id
+        ,quantity
+        ,_fivetran_deleted
+        ,_fivetran_synced
+    FROM dim_order_items
     )
 
 SELECT * FROM renamed_casted

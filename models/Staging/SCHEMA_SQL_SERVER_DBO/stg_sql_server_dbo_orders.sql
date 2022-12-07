@@ -28,10 +28,15 @@ renamed as (
         , order_total as total_cost_USD
         , datediff(day,created_at,delivered_at) as delivered_days
         , trim(user_id) as user_id
-        , _fivetran_deleted
+        , case
+            when _fivetran_deleted is null
+            then false
+            else _fivetran_deleted
+          end as _fivetran_deleted
         , _fivetran_synced
 
     from source
+    order by user_id
 )
 
 select * from renamed

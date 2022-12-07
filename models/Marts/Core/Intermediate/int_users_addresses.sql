@@ -28,15 +28,15 @@ renamed_casted AS (
         , u.created_at as user_created_at
         , u.updated_at as user_updated_at
         , u.without_update as user_without_update
-        , u._fivetran_deleted as user_ft_deleted
         , u._fivetran_synced as user_ft_synced
-        , a._fivetran_deleted as address_ft_deleted
         , a._fivetran_synced as address_ft_synced
 
     FROM int_users_addresses a
     left join stg_sql_server_dbo_users u
     on a.address_id = u.address_id
     where user_id is not null
+    and u._fivetran_deleted = false
+    and a._fivetran_deleted = false
     )
 
 SELECT * FROM renamed_casted

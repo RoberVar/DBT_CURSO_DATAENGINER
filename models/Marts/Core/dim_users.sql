@@ -5,7 +5,7 @@ WITH dim_users AS (
 
 renamed_casted AS (
     SELECT
-        user_id unique
+        user_id
         , first_name
         , last_name
         , email
@@ -13,8 +13,10 @@ renamed_casted AS (
         , created_at
         , updated_at
         , address_id
-        , date_load
-    FROM stg_sql_server_dbo_users
+        , without_update
+        , _fivetran_deleted
+        , _fivetran_synced
+    FROM dim_users
     )
 
 SELECT * FROM renamed_casted

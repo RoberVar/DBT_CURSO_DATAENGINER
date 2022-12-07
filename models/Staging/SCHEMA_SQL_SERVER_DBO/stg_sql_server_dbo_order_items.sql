@@ -14,11 +14,11 @@ with source as (
 renamed as (
 
     select
-        trim(order_id) as order_id
-        ,trim(product_id) as product_id
-        ,quantity
-        ,_fivetran_deleted
-        ,_fivetran_synced
+         trim(order_id) as order_id
+        , trim(product_id) as product_id
+        , quantity
+        , _fivetran_deleted
+        , _fivetran_synced
 
     from source
 

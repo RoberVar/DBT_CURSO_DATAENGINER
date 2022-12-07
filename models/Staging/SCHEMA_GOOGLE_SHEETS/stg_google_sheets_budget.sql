@@ -13,10 +13,11 @@ WITH stg_budget_products AS (
 renamed_casted AS (
     SELECT
           md5(_row) as budget_id
-        , month
+        , year(month)*100+month(month) as budget_yearmonth
         , quantity
         , product_id
         , _fivetran_synced
+        , false as _fivetran_deleted
     FROM stg_budget_products
     )
 
