@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='table'
+    materialized='incremental'
   )
 }}
 
@@ -33,6 +33,8 @@ renamed_casted AS (
         , user_created_at
         , user_updated_at
         , user_without_update
+        , iu.user_ft_synced
+        , iu.address_ft_synced
 
     FROM fct_customers c
     left join int_users_addresses iu on c.user_id = iu.user_id
@@ -40,3 +42,10 @@ renamed_casted AS (
     )
 
 SELECT * FROM renamed_casted
+
+{% if is_incremental() %}
+
+  where iu.user_ft_synced > (select max(iu.user_ft_synced) from {{ this }}
+  or iu.address_ft_synced > (select max(iu.address_ft_synced) from {{ this }})
+
+{% endif %}

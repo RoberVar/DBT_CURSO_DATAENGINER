@@ -1,6 +1,6 @@
 {{ config(
     materialized='view',
-    unique_key = '_row'
+    unique_key = 'budget_id'
     ) 
     }}
 

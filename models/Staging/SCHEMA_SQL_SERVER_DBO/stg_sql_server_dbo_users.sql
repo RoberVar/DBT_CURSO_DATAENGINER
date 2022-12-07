@@ -20,8 +20,8 @@ renamed as (
         , last_name
         , email
         , phone_number
-        , created_at
-        , updated_at
+        , created_at::timestamp_ltz
+        , updated_at::timestamp_ltz
         , datediff(day,created_at,updated_at) as without_update
         , _fivetran_deleted
         , _fivetran_synced

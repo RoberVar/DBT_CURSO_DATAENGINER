@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='table'
+    materialized='incremental'
   )
 }}
 
@@ -36,3 +36,9 @@ renamed_casted AS (
     )
 
 SELECT * FROM renamed_casted
+
+{% if is_incremental() %}
+
+  where e._fivetran_synced > (select max(e._fivetran_synced) from {{ this }})
+
+{% endif %}

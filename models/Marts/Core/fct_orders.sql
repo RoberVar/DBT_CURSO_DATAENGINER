@@ -1,3 +1,9 @@
+{{
+  config(
+    materialized='incremental'
+  )
+}}
+
 WITH fct_orders AS (
     SELECT * 
     FROM {{ ref('stg_sql_server_dbo_orders') }}
@@ -27,3 +33,9 @@ renamed_casted as (
 )
 
 select * from renamed_casted
+
+{% if is_incremental() %}
+
+  where _fivetran_synced > (select max(_fivetran_synced) from {{ this }})
+
+{% endif %}
