@@ -18,7 +18,7 @@ renamed_casted AS (
         , trim(user_id) as user_id
         , trim(product_id) as product_id
         , trim(session_id) as session_id
-        , created_at::timestamp_ltz
+        , created_at::timestamp_ltz as created_at
         , trim(order_id) as order_id
         , _fivetran_deleted
         , _fivetran_synced

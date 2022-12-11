@@ -37,7 +37,7 @@ SELECT * FROM renamed_casted
 
 {% if is_incremental() %}
 
-  where p._fivetran_synced > (select max(_fivetran_synced) from {{ this }}
-  or l._fivetran_synced > (select max(_fivetran_synced) from {{ this }})
+  where products_ft_synced > (select max(products_ft_synced) from {{ this }})
+  or order_items_ft_synced > (select max(order_items_ft_synced) from {{ this }})
 
 {% endif %}

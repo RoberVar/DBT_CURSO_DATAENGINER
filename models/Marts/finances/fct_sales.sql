@@ -25,7 +25,7 @@ renamed_casted AS (
         , sold_quantity
         , earn_by_product_USD
         , sa.price_USD
-        , bu._fivetran_synced
+        , _fivetran_synced
     from fct_sales sa
     join stg_budget bu
     on (sa.product_id = bu.product_id)
@@ -37,6 +37,6 @@ SELECT * FROM renamed_casted
 
 {% if is_incremental() %}
 
-  where bu._fivetran_synced > (select max(bu._fivetran_synced) from {{ this }})
+  where _fivetran_synced > (select max(_fivetran_synced) from {{ this }})
 
 {% endif %}

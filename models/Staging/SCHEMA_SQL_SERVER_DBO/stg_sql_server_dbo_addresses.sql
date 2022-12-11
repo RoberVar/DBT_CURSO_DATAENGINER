@@ -17,7 +17,11 @@ renamed as (
         trim(address_id) as address_id
         ,country
         ,state
-        ,zipcode
+        ,case
+            when len(zipcode) = 4
+            then concat('0',zipcode)
+            else zipcode
+        end as zipcode
         ,address
         ,_fivetran_deleted
         ,_fivetran_synced

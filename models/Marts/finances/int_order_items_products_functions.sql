@@ -35,8 +35,10 @@ renamed_casted AS (
     on oi.product_id = p.product_id
     left join stg_orders o
     on oi.order_id = o.order_id
+    
     where oi._fivetran_deleted = false
-    and p._fivetran_deleted = false
+    or p._fivetran_deleted = false
+    or o._fivetran_deleted = false
 
     group by p.product_id, yearmonth, p.name, p.price_USD, p.inventory
     order by p.product_id

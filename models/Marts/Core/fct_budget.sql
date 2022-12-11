@@ -13,7 +13,7 @@ renamed_casted as (
 
     select
           budget_id
-        , month
+        , budget_yearmonth
         , quantity
         , product_id
         , _fivetran_synced

@@ -45,7 +45,7 @@ SELECT * FROM renamed_casted
 
 {% if is_incremental() %}
 
-  where iu.user_ft_synced > (select max(iu.user_ft_synced) from {{ this }}
-  or iu.address_ft_synced > (select max(iu.address_ft_synced) from {{ this }})
+  where user_ft_synced > (select max(user_ft_synced) from {{ this }})
+  or address_ft_synced > (select max(address_ft_synced) from {{ this }})
 
 {% endif %}

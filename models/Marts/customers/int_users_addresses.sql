@@ -43,6 +43,7 @@ SELECT * FROM renamed_casted
 
 {% if is_incremental() %}
 
-  where _fivetran_synced > (select max(_fivetran_synced) from {{ this }})
+  where user_ft_synced > (select max(user_ft_synced) from {{ this }})
+  or address_ft_synced > (select max(address_ft_synced) from {{ this }})
 
 {% endif %}
