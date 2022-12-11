@@ -37,3 +37,6 @@ Finally we have some data explotation cases (marts) at the end of our proyect wh
 the archiquecture that our data had at the begining but totally clear (supposed to) and some
 tables I created to access data easily.
 
+#Concluding
+There are some things that can be made much better, like the use of more macros, use snapshots in
+the proyect, and some more... But the main idea has been taken.

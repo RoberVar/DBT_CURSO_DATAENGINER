@@ -16,8 +16,9 @@ renamed_casted as (
         , budget_yearmonth
         , quantity
         , product_id
-        , _fivetran_synced
         , _fivetran_deleted
+        , _fivetran_synced
+
 
     from fct_budget
 )

@@ -1,0 +1,34 @@
+version: 2
+
+##Documentation of Staging layer of models from google_sheet, all the info
+##in staging layer has been materialized as view to get directly the info
+##from the source with the tests, some of the values has been refined
+##to get a near clear database.
+
+models:
+
+#####Budget Table#####
+
+  - name: stg_google_sheets_budget
+    description: "Table wich contains all the info about budgets per month"
+    columns:
+      - name: budget_id
+        description: "UUID for every budget"
+
+      - name: budget_yearmonth
+        description: "Identifier of the date of the budget"
+
+      - name: quantity
+        description: "Amount of products considered that are going to be sold"
+
+      - name: product_id
+        description: "Identifier of every product in the budget"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+        - accepted_values:
+            values: ['true','false']
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"

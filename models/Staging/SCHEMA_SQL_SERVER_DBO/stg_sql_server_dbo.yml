@@ -1,8 +1,9 @@
 version: 2
 
-##Documentation of Staging layer, all the info in staging layer has been
-##materialized as view to get directly the info from the source with the
-##tests, some of the values has been refined to get a near pure database.
+##Documentation of Staging layer of models from SQL_SERVER, all the info
+##in staging layer has been materialized as view to get directly the info
+##from the source with the tests, some of the values has been refined
+##to get a near clear database.
 
 models:
 
@@ -254,4 +255,36 @@ models:
 
       - name: _fivetran_synced
         description: "Date value that shows the last info update of the row"
+
+#####Date Table#####
+
+  - name: stg_sql_server_dbo_date
+    description: "Table wich contains dates"
+    columns:
+      - name: fecha_forecast
+        description: "Date of the day"
+
+      - name: id_date
+        description: "UUID for every date"
+
+      - name: anio
+        description: "Date of the year"
+
+      - name: mes
+        description: "Date of the month"
+
+      - name: desc_mes
+        description: "Three character description of the month"
+
+      - name: id_anio_mes
+        description: "Concat date of the year and the month"
+
+      - name: dia_previo
+        description: "Previous day of the date"
+
+      - name: anio_semana_dia
+        description: "Date made of year, number of week of the year, and day"
+
+      - name: semana
+        description: "Number of the week of the year"
 

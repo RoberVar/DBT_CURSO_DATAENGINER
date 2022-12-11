@@ -1,0 +1,179 @@
+version: 2
+
+##Documentation of intermediate layer, the most of tables in intermediate
+##layer has been materialized as incremental to have a growing database
+##to query,values has been totally refined to get a right explotation model.
+
+models:
+
+#####Users Address Intermediate table#####
+
+  - name: int_users_addresses
+    description: "Intermediate table made to get all the specific info of every user and where it lives"
+    columns:
+      - name: user_id
+        description: "UUID for the user"
+
+      - name: address_id
+        description: "Identifier for the address"
+    
+      - name: name
+        description: "Concatenated field of first name and last name of the user"
+
+      - name: address
+        description: "Name of the street and number where de user lives"
+
+      - name: phone_number
+        description: "Phone number of the user"
+
+      - name: email
+        description: "Email of the user"
+
+      - name: country
+        description: "Country where the user lives"
+
+      - name: state
+        description: "State where de user lives"
+
+      - name: zipcode
+        description: "Zipcode of the address where the user lives"
+
+      - name: user_created_at
+        description: "Date when the user was created"
+
+      - name: user_updated_at
+        description: "Date when the data of the user was updated"
+
+      - name: user_without_update
+        description: "Days without been updated the user"
+
+      - name: user_ft_synced
+        description: "Date value that shows the last info updated of the user"
+
+      - name: address_ft_synced
+        description: "Date value that shows the last info update of the address"
+
+#####Orders-Users-Promos Functions Intermediate Table#####
+
+  - name: int_orders_users_promos_functions
+    description: "Table orders/users/promos joined to make son aggrupated functions"
+    columns:
+      - name: user_id
+        description: "UUID of every user"
+
+      - name: orders_by_user
+        description: "Amount of orders ask by a user"
+
+      - name: total_user_cost_usd
+        description: "Total cost spent by a user"
+
+      - name: last_ordered
+        description: "Last order ask by a user"
+
+      - name: first_ordered
+        description: "First order ask by a user"
+
+      - name: discount_customer_usd
+        description: "Total discount received by a user"
+
+      - name: average_user_cost_usd
+        description: "Average cost of all orders by a user"
+
+#####Order-Items-Products-Functions Intermediate table#####
+
+  - name: int_order_items_products_functions
+    description: "Join of tables refered above to do some functions grouped by product"
+    columns:
+      - name: product_id
+        description: "UUID of every product"
+
+      - name: name
+        description: "Name of the product"
+
+      - name: price_usd
+        description: "Price of the product"
+    
+      - name: inventory
+        description: "Amount left on the warehouse of that product"
+
+      - name: yearmonth
+        description: "Date when the order asking by the product was made"
+
+      - name: sold_quantity
+        description: "Quantity sold of that product"
+
+      - name: earn_by_product_usd
+        description: "Quantity earn by that product"
+
+#####Events functions intermediate table#####
+
+  - name: int_events_functions
+    description: "Intermediate table to calculate some functions from events"
+    columns:
+      - name: user_id
+        description: "Identifier of the user"
+
+      - name: page_view_amount
+        description: "Column wich keeps how mane time a user has made the event with the name of the column"
+
+      - name: checkout_amount
+        description: "Column wich keeps how mane time a user has made the event with the name of the column"
+
+      - name: package_shipped_amount
+        description: "Column wich keeps how mane time a user has made the event with the name of the column"
+
+      - name: add_to_cart_amount
+        description: "Column wich keeps how mane time a user has made the event with the name of the column"
+
+      - name: product_id
+        description: "Id of the product that is being view on the internet"
+
+      - name: page_url
+        description: "URL of the product's webpage"
+
+      - name: event_type
+        description: "Description of the event on the web, as it could be add to cart, check out..."
+
+      - name: event_id
+        description: "UUID for the event"
+
+      - name: order_id
+        description: "Identifier of the order of the product"
+
+      - name: session_id
+        description: "Identifier of the session wich user logs in"
+
+      - name: yearmonth
+        description: "Identifier of the date where the event has occurred"
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Order-Items-Products Intermediate table#####
+
+  - name: int_order_items_products
+    description: ""
+    columns:
+      - name: order_id
+        description: "Identifier of the order wich contains the product"
+
+      - name: product_id
+        description: "Identifier of the product wich is in the order"
+
+      - name: name
+        description: "Name of the product"
+
+      - name: inventory
+        description: "Amount remaining in the warehouse"
+
+      - name: price_usd
+        description: "Price in United State Dollars of the product"
+
+      - name: quantity
+        description: "Quantity sold in every order of the product"
+
+      - name: products_ft_synced
+        description: "Date value that shows the last info update of the row by product"
+
+      - name: order_items_ft_synced
+        description: "Date value that shows the last info update of the row by order_item"
