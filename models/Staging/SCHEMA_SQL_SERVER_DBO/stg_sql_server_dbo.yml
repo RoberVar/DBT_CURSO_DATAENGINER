@@ -1,0 +1,290 @@
+version: 2
+
+##Documentation of Staging layer of models from SQL_SERVER, all the info
+##in staging layer has been materialized as view to get directly the info
+##from the source with the tests, some of the values has been refined
+##to get a near clear database.
+
+models:
+
+#####Addresses Table#####
+
+  - name: stg_sql_server_dbo_addresses
+    description: "Table wich contains all the info about addresses of users and orders"
+    columns:
+      - name: address_id
+        description: "UUID for addresses"
+
+      - name: country
+        description: "The country where the address is at"
+
+      - name: state
+        description: "The state where the address is at"
+
+      - name: zipcode
+        description: "The Zip Code where the address is at"
+        -tests:
+          - dbt_utils.expression_is_true:
+            expression: leng() = 5
+      - name: address
+        description: "Name of the address, contains street and number"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+        - accepted_values:
+            values: ['true','false']
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Events Table#####
+
+  - name: stg_sql_server_dbo_events
+    description: "Table wich contains all the info about web events"
+    columns:
+      - name: event_id
+        description: "UUID for every event on the web"
+
+      - name: page_url
+        description: "The URL of the webpage that the user has visited"
+
+      - name: event_type
+        description: "Description of the event on the web, as it could be add to cart, check out..."
+
+      - name: user_id
+        description: "Identifier of the user who make the event"
+
+      - name: product_id
+        description: "Identifier of the product that the user is looking for"
+
+      - name: session_id
+        description: "Identifier of the sesion that the user has started"
+
+      - name: created_at
+        description: "Time when the event was created timestamped at Local Time Zone"
+
+      - name: order_id
+        description: "Identifier of the order when the product has been sold"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+        - accepted_values:
+            values: ['true','false']
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Order_Items Table#####
+
+  - name: stg_sql_server_dbo_order_items
+    description: "Table wich contains for every product in every order the amount of that product sold"
+    columns:
+      - name: order_id
+        description: "Identifier for every order"
+
+      - name: product_id
+        description: "Identifier for the product that has been sold in the order"
+
+      - name: quantity
+        description: "Amount the product sold in the order"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+        - accepted_values:
+            values: ['true','false']
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Orders Table#####
+
+  - name: stg_sql_server_dbo_orders
+    description: "Table wich contains all the info about a order"
+    columns:
+      - name: order_id
+        description: "UUID for every order"
+
+      - name: delivered_at
+        description: "Date when the product arrives to the customer timestamped at Local Time Zone"
+
+      - name: order_cost_usd
+        description: "Cost of the order without the shipping cost in United State Dollars"
+
+      - name: shipping_service
+        description: "Name of the company that deliver the products sold"
+
+      - name: promo_id
+        description: "Identifier of the promotions that could be applied to a order"
+
+      - name: estimated_delivery_at
+        description: "Date estimated when the user is going to receive the package timestamped at Local Time Zone"
+
+      - name: tracking_id
+        description: "Identifier of the shipping companies to locate the product"
+
+      - name: shipping_cost_usd
+        description: "Cost of the shipping service in United State Dollars"
+
+      - name: address_id
+        description: "Identifier of the address where the package is going to be sent or has been sent"
+
+      - name: status
+        description: "Value that shows the order status, prepared, delivered, shipped..."
+
+      - name: created_at
+        description: "Date when the order is applied"
+
+      - name: total_cost_usd
+        description: "Total cost of the order, it is the cost of the products, the shipping service, and if it has one, the discount of the promotion"
+
+      - name: delivered_days
+        description: "Days that the package take to be delivered"
+
+      - name: user_id
+        description: "Identifier of the user that apply for the order"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+        - accepted_values:
+            values: ['true','false']
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Products Table#####
+
+  - name: stg_sql_server_dbo_products
+    description: "Table wich contains the info of every product"
+    columns:
+      - name: product_id
+        description: "UUID of every product"
+
+      - name: inventory
+        description: "Amount remaining in the warehouse of every product"
+
+      - name: price_usd
+        description: "Price of every product in United State Dollars"
+
+      - name: name
+        description: "Name of the product"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+        - accepted_values:
+            values: ['true','false']
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Users Table#####
+
+  - name: stg_sql_server_dbo_users
+    description: "Table wich contains info of every user"
+    columns:
+      - name: user_id
+        description: "UUID for every user"
+
+      - name: address_id
+        description: "Identifier of the address where the user lives in"
+
+      - name: first_name
+        description: "First name of the user"
+
+      - name: last_name
+        description: "Last name of the user"
+
+      - name: email
+        description: "Email of the user"
+
+      - name: phone_number
+        description: "Phone number of the user"
+
+      - name: created_at
+        description: "Date when the user was inserted in the database timestamped at Local Time Zone"
+
+      - name: updated_at
+        description: "Last date when the user was modified timestamped at Local Time Zone"
+
+      - name: without_update
+        description: "Time in days that the user has been without been updated"
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+        - accepted_values:
+            values: ['true','false']
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Promos Table#####
+
+  - name: stg_sql_server_dbo_promos
+    description: "Table wich contais all the info about the promos"
+    columns:
+      - name: promo_id
+        description: "UUID for every promo"
+        tests:
+          - unique
+          - not_null
+      - name: description
+        description: "Name of the promotion"
+
+      - name: discount
+        description: "Amount that is going to be discounted for every order"
+
+      - name: status
+        description: "It could be active or inactive, depends on the promo"
+        tests:
+        - accepted_values:
+            values: ['active','inactive']
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+        - accepted_values:
+            values: ['true','false']
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Date Table#####
+
+  - name: stg_sql_server_dbo_date
+    description: "Table wich contains dates"
+    columns:
+      - name: fecha_forecast
+        description: "Date of the day"
+
+      - name: id_date
+        description: "UUID for every date"
+
+      - name: anio
+        description: "Date of the year"
+
+      - name: mes
+        description: "Date of the month"
+
+      - name: desc_mes
+        description: "Three character description of the month"
+
+      - name: id_anio_mes
+        description: "Concat date of the year and the month"
+
+      - name: dia_previo
+        description: "Previous day of the date"
+
+      - name: anio_semana_dia
+        description: "Date made of year, number of week of the year, and day"
+
+      - name: semana
+        description: "Number of the week of the year"
+

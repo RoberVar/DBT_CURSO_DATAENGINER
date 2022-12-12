@@ -1,0 +1,251 @@
+version: 2
+
+##Documentation of Marts layer, all the info in Marts layer has been
+##materialized as incremental to have a growing database to query, 
+##values has been totally refined to get a right explotation model.
+##Test mostly are not needed in this case cause I consider data clear.
+
+models:
+
+#####Addresses Table#####
+
+  - name: dim_addresses
+    description: "Table wich contains all the info about addresses of users and orders"
+    columns:
+      - name: address_id
+        description: "UUID for addresses"
+          
+      - name: country
+        description: "The country where the address is at"
+
+      - name: state
+        description: "The state where the address is at"
+
+      - name: zipcode
+        description: "The Zip Code where the address is at"
+
+      - name: address
+        description: "Name of the address, contains street and number"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Events Table#####
+
+  - name: fct_events
+    description: "Table wich contains all the info about web events"
+    columns:
+      - name: event_id
+        description: "UUID for every event on the web"
+
+      - name: page_url
+        description: "The URL of the webpage that the user has visited"
+
+      - name: event_type
+        description: "Description of the event on the web, as it could be add to cart, check out..."
+
+      - name: user_id
+        description: "Identifier of the user who make the event"
+
+      - name: product_id
+        description: "Identifier of the product that the user is looking for"
+
+      - name: session_id
+        description: "Identifier of the sesion that the user has started"
+
+      - name: created_at
+        description: "Time when the event was created timestamped at Local Time Zone"
+
+      - name: order_id
+        description: "Identifier of the order when the product has been sold"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Order_Items Table#####
+
+  - name: dim_order_items
+    description: "Table wich contains for every product in every order the amount of that product sold"
+    columns:
+      - name: order_id
+        description: "Identifier for every order"
+
+      - name: product_id
+        description: "Identifier for the product that has been sold in the order"
+
+      - name: quantity
+        description: "Amount the product sold in the order"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Orders Table#####
+
+  - name: fct_orders
+    description: "Table wich contains all the info about a order"
+    columns:
+      - name: order_id
+        description: "UUID for every order"
+
+      - name: delivered_at
+        description: "Date when the product arrives to the customer timestamped at Local Time Zone"
+
+      - name: order_cost_usd
+        description: "Cost of the order without the shipping cost in United State Dollars"
+
+      - name: shipping_service
+        description: "Name of the company that deliver the products sold"
+
+      - name: promo_id
+        description: "Identifier of the promotions that could be applied to a order"
+
+      - name: estimated_delivery_at
+        description: "Date estimated when the user is going to receive the package timestamped at Local Time Zone"
+
+      - name: tracking_id
+        description: "Identifier of the shipping companies to locate the product"
+
+      - name: shipping_cost_usd
+        description: "Cost of the shipping service in United State Dollars"
+
+      - name: address_id
+        description: "Identifier of the address where the package is going to be sent or has been sent"
+
+      - name: status
+        description: "Value that shows the order status, prepared, delivered, shipped..."
+
+      - name: created_at
+        description: "Date when the order is applied"
+
+      - name: total_cost_usd
+        description: "Total cost of the order, it is the cost of the products, the shipping service, and if it has one, the discount of the promotion"
+
+      - name: delivered_days
+        description: "Days that the package take to be delivered"
+
+      - name: user_id
+        description: "Identifier of the user that apply for the order"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Products Table#####
+
+  - name: dim_products
+    description: "Table wich contains the info of every product"
+    columns:
+      - name: product_id
+        description: "UUID of every product"
+
+      - name: inventory
+        description: "Amount remaining in the warehouse of every product"
+
+      - name: price_usd
+        description: "Price of every product in United State Dollars"
+
+      - name: name
+        description: "Name of the product"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Users Table#####
+
+  - name: dim_users
+    description: "Table wich contains info of every user"
+    columns:
+      - name: user_id
+        description: "UUID for every user"
+
+      - name: first_name
+        description: "First name of the user"
+
+      - name: last_name
+        description: "Last name of the user"
+
+      - name: email
+        description: "Email of the user"
+
+      - name: phone_number
+        description: "Phone number of the user"
+
+      - name: created_at
+        description: "Date when the user was inserted in the database timestamped at Local Time Zone"
+
+      - name: updated_at
+        description: "Last date when the user was modified timestamped at Local Time Zone"
+
+      - name: address_id
+        description: "Identifier of the address where the user lives in"
+
+      - name: without_update
+        description: "Time in days that the user has been without been updated"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Promos Table#####
+
+  - name: dim_promos
+    description: "Table wich contais all the info about the promos"
+    columns:
+      - name: promo_id
+        description: "UUID for every promo"
+
+      - name: description
+        description: "Name of the promotion"
+
+      - name: discount
+        description: "Amount that is going to be discounted for every order"
+
+      - name: status
+        description: "It could be active or inactive, depends on the promo"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"
+
+#####Budget Table#####
+
+  - name: fct_budget
+    description: "Table wich contains all the info about budgets per month"
+    columns:
+      - name: budget_id
+        description: "UUID for every budget"
+
+      - name: budget_yearmonth
+        description: "Identifier of the date of the budget"
+
+      - name: quantity
+        description: "Amount of products considered that are going to be sold"
+
+      - name: product_id
+        description: "Identifier of every product in the budget"
+
+      - name: _fivetran_deleted
+        description: "Boolean value that shows if row's data is still valid"
+        tests:
+
+      - name: _fivetran_synced
+        description: "Date value that shows the last info update of the row"

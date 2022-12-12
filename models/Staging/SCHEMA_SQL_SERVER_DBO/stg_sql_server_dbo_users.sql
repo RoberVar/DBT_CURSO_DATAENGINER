@@ -1,6 +1,6 @@
 {{
   config(
-     materialized='incremental',
+     materialized='view',
      unique_key = 'user_id'
   )
 }}
@@ -14,20 +14,20 @@ with source as (
 renamed as (
 
     select
-        user_id,
-        address_id,
-        first_name,
-        email,
-        created_at,
-        last_name,
-        updated_at,
-        phone_number,
-        total_orders,
-        _fivetran_deleted,
-        _fivetran_synced
+        trim(user_id) as user_id
+        , trim(address_id) as address_id
+        , first_name
+        , last_name
+        , email
+        , phone_number
+        , created_at::timestamp_ltz as created_at
+        , updated_at::timestamp_ltz as updated_at
+        , datediff(day,created_at,updated_at) as without_update
+        , _fivetran_deleted
+        , _fivetran_synced
 
     from source
-
+    
 )
 
 select * from renamed

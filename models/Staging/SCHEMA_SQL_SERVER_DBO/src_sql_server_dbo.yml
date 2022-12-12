@@ -11,136 +11,145 @@ sources:
         {%- else -%} {{target.database}}_bronze_db_alumno15
         {%- endif -%}
 
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    freshness:
+      warn_after: {count: 24, period: hour}
+
     tables:
       - name: addresses
+        loaded_at_field: _fivetran_synced
         columns:
           - name: address_id
-            description: ""
+            description: "UUID for addresses"
             tests:
             - unique
             - not_null
           - name: country
-            description: ""          
+            description: "The country where the address is at"          
             tests:
             - not_null
           - name: state
-            description: ""          
+            description: "The state where the address is at"          
             tests:
             - not_null
           - name: zipcode
-            description: ""
+            description: "The Zip Code where the address is at"
             tests:
             - not_null
           - name: address
-            description: ""          
+            description: "Name of the address, contains street and number"
             tests:
             - not_null
-          - name: _fivetran_deleted
+          - name: "Boolean value that shows if row's data is still valid"
             description: ""
           - name: _fivetran_synced
-            description: ""
+            description: "Date value that shows the last info update of the row"
 
       - name: events
+        loaded_at_field: _fivetran_synced
         columns:
           - name: event_id
-            description: ""          
+            description: "UUID for every event on the web"
             tests:
             - unique
             - not_null
           - name: product_id
-            description: ""
-            tests:
-            - not_null
-            - relationships:
-                to: source('sql_server_dbo','products')
-                field: product_id
+            description: "Identifier of the product that the user is looking for"
           - name: created_at
-            description: ""
+            description: "Time when the event was created"
             tests:
             - not_null                 
           - name: page_url
-            description: ""
+            description: "The URL of the webpage that the user has visited"
             tests:
             - not_null                 
           - name: event_type
-            description: ""
+            description: "Description of the event on the web, as it could be add to cart, check out..."
             tests:
             - not_null                 
           - name: order_id
-            description: ""
+            description: "Identifier of the order when the product has been sold"
           - name: user_id
-            description: ""
+            description: "Identifier of the user who make the event"
             tests:
             - not_null
             - relationships:
                 to: source('sql_server_dbo','users')
                 field: user_id
           - name: session_id
-            description: ""
+            description: "Identifier of the sesion that the user has started"
             tests:
             - not_null                 
           - name: _fivetran_deleted
-            description: ""
+            description: "Boolean value that shows if row's data is still valid"
           - name: _fivetran_synced
-            description: ""
+            description: "Date value that shows the last info update of the row"
 
       - name: fivetran_audit
+        loaded_at_field: _fivetran_synced
         columns:
           - name: id
-            description: ""
+            description: "UUID of the data loaded"
           - name: message
-            description: ""
+            description: "Message shown in error case"
           - name: update_started
-            description: ""
+            description: "Time when the data load started"
           - name: update_id
-            description: ""
+            description: "UUID for the date loaded"
           - name: schema
-            description: ""
+            description: "Name of the schema where the data was loaded"
           - name: table
-            description: ""
+            description: "Name of the table where the data was loaded"
           - name: start
-            description: ""
+            description: "Time when the data load starts"
           - name: done
-            description: ""
+            description: "Time when the data load ends"
           - name: rows_updated_or_inserted
-            description: ""
+            description: "Number of the rows updated"
           - name: status
-            description: ""
+            description: "Check if all the data load has work properly"
           - name: progress
             description: ""
           - name: _fivetran_synced
-            description: ""
+            description: "Time when the data updated is syncro"
 
       - name: order_items
+        loaded_at_field: _fivetran_synced
         columns:
           - name: order_id
-            description: ""
+            description: "Identifier for every order"
             tests:
             - not_null
             - relationships:
                 to: source('sql_server_dbo','orders')
                 field: order_id                       
           - name: product_id
-            description: ""
+            description: "Identifier for the product that has been sold in the order"
             tests:
             - not_null
             - relationships:
                 to: source('sql_server_dbo','products')
                 field: product_id  
           - name: quantity
-            description: ""
+            description: "Amount the product sold in the order"
             tests:
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
             - not_null
-            - positive_values  
           - name: _fivetran_deleted
-            description: ""
+            description: "Boolean value that shows if row's data is still valid"
           - name: _fivetran_synced
-            description: ""
+            description: "Date value that shows the last info update of the row"
 
       - name: orders
+        loaded_at_field: _fivetran_synced
         columns:
           - name: order_id
-            description: ""
+            description: "UUID for every order"
             tests:
             - unique
             - not_null
@@ -148,133 +157,138 @@ sources:
                 to: source('sql_server_dbo','order_items')
                 field: order_id       
           - name: delivered_at
-            description: ""
+            description: "Date when the product arrives to the customer"
           - name: order_cost
-            description: ""
+            description: "Cost of the order without the shipping cost"
+            tests:
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: shipping_service
-            description: ""
+            description: "Name of the company that deliver the products sold"
           - name: promo_id
-            description: ""
-            tests:
-            - not_null
-            - relationships:
-                to: source('sql_server_dbo','promos')
-                field: promo_id              
+            description: "Identifier of the promotions that could be applied to a order"
           - name: estimated_delivery_at
-            description: ""
+            description: "Date estimated when the user is going to receive the package"
           - name: tracking_id
-            description: ""
-            tests:
-            - unique
+            description: "Identifier of the shipping companies to locate the product"
           - name: shipping_cost
-            description: ""
+            description: "Cost of the shipping service"
             tests:
-            - positive_values
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: address_id
-            description: ""
+            description: "Identifier of the address where the package is going to be sent or has been sent"
             tests:
             - not_null
             - relationships:
-                to: source('sql_server_dbo','users')
+                to: source('sql_server_dbo','address')
                 field: address_id              
           - name: status
-            description: ""
+            description: "Value that shows the order status, prepared, delivered, shipped..."
           - name: created_at
-            description: ""
+            description: "Date when the order is applied"
           - name: order_total
-            description: ""
+            description: "Total cost of the order"
             tests:
-            - positive_values
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: user_id
-            description: ""
+            description: "Identifier of the user that apply for the order"
             tests:
             - not_null
             - relationships:
                 to: source('sql_server_dbo','users')
                 field: user_id              
           - name: _fivetran_deleted
-            description: ""
+            description: "Boolean value that shows if row's data is still valid"
           - name: _fivetran_synced
-            description: ""
+            description: "Date value that shows the last info update of the row"
 
       - name: products
+        loaded_at_field: _fivetran_synced
         columns:
           - name: product_id
-            description: ""
+            description: "UUID of every product"
             tests:
             - unique
             - not_null            
           - name: inventory
-            description: ""
-          - name: price
-            description: ""
+            description: "Amount remaining in the warehouse of every product"
             tests:
-            - positive_values
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
+          - name: price
+            description: "Price of every product"
+            tests:
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: name
-            description: ""
+            description: "Name of the product"
             tests:
             - not_null
           - name: _fivetran_deleted
-            description: ""
+            description: "Boolean value that shows if row's data is still valid"
           - name: _fivetran_synced
-            description: ""
+            description: "Date value that shows the last info update of the row"
 
       - name: promos
+        loaded_at_field: _fivetran_synced
         columns:
           - name: promo_id
-            description: ""
+            description: "UUID for every promo"
             tests:
             - unique
             - not_null            
           - name: discount
-            description: ""
+            description: "Amount that is going to be discounted for every order"
             tests:
-            - positive_values
+            - dbt_utils.expression_is_true:
+                expression: ">= 0"
           - name: status
-            description: ""
+            description: "It could be active or inactive, depends on the promo"
             tests:
             - not_null
           - name: _fivetran_deleted
-            description: ""
+            description: "Boolean value that shows if row's data is still valid"
           - name: _fivetran_synced
-            description: ""
+            description: "Date value that shows the last info update of the row"
 
       - name: users
+        loaded_at_field: _fivetran_synced
         columns:
           - name: user_id
-            description: ""
+            description: "UUID for every user"
             tests:
             - unique
             - not_null            
           - name: address_id
-            description: ""
+            description: "Identifier of the address where the user lives in"
             tests:
             - not_null            
-            - unique
             - relationships:
                 to: source('sql_server_dbo','addresses')
                 field: address_id              
           - name: first_name
-            description: ""
+            description: "First name of the user"
             tests:
             - not_null              
           - name: email
-            description: ""
+            description: "Email of the user"
           - name: created_at
-            description: ""
+            description: "Date when the user was inserted in the database"
             tests:
             - not_null  
           - name: last_name
-            description: ""
+            description: "Last name of the user"
             tests:
             - not_null              
           - name: updated_at
-            description: ""
+            description: "Last date when the user was modified"
           - name: phone_number
-            description: ""
+            description: "Phone number of the user"
           - name: total_orders
             description: ""
           - name: _fivetran_deleted
-            description: ""
+            description: "Boolean value that shows if row's data is still valid"
           - name: _fivetran_synced
-            description: ""
+            description: "Date value that shows the last info update of the row"

@@ -58,6 +58,12 @@ models:
         {%- endif -%}
       core:
         +schema: core
+      customers:
+        +schema: customers
+      finance:
+        +schema: finances
+      products:
+        +schema: products
         
 snapshots:
   +sql_header: "alter session set timezone = 'Europe/Madrid';alter session set week_start = 7;"

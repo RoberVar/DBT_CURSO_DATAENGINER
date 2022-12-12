@@ -16,8 +16,12 @@ sources:
       schema: false
       identifier: false
 
+    freshness:
+      warn_after: {count: 24, period: hour}
+
     tables:
       - name: budget
+        loaded_at_field: _fivetran_synced
         columns:
           - name: _row
             tests:
@@ -27,11 +31,12 @@ sources:
             tests:
             - not_null
             - relationships:
-                to: ref('sql_server_dbo','product_id')
+                to: source('sql_server_dbo','product_id')
                 field: product_id          
           - name: quantity
             tests:
-            - positive_values
+              - dbt_utils.expression_is_true:
+                  expression: ">= 0"
           - name: month
           - name: _fivetran_synced
 		  

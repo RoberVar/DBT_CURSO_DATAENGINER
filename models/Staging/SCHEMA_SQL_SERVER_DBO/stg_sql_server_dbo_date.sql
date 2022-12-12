@@ -1,6 +1,7 @@
 {{ 
     config(
         materialized='table', 
+        unique_key= 'id_date',
         sort='date_day',
         dist='date_day',
         pre_hook="alter session set timezone = 'Europe/Madrid'; alter session set week_start = 7;" 
@@ -17,7 +18,7 @@ with date as (
 
 
 select
-      date_day as fecha_forecast
+     date_day as fecha_forecast
     , year(date_day)*10000+month(date_day)*100+day(date_day) as id_date
     , year(date_day) as anio
     , month(date_day) as mes
@@ -29,3 +30,4 @@ select
 from date
 order by
     date_day desc
+

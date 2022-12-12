@@ -4,25 +4,20 @@
   )
 }}
 
-WITH dim_users AS (
+WITH dim_products AS (
     SELECT * 
-    FROM {{ ref('stg_sql_server_dbo_users') }}
+    FROM {{ ref('stg_sql_server_dbo_products') }}
     ),
 
 renamed_casted AS (
-    SELECT
-        user_id
-        , first_name
-        , last_name
-        , email
-        , phone_number
-        , created_at
-        , updated_at
-        , address_id
-        , without_update
+    select
+        product_id
+        , inventory
+        , price_USD
+        , name
         , _fivetran_deleted
         , _fivetran_synced
-    FROM dim_users
+    FROM dim_products
     )
 
 SELECT * FROM renamed_casted

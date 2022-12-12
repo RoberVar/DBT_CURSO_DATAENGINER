@@ -1,6 +1,6 @@
 {{
   config(
-     materialized='incremental',
+     materialized='view',
      unique_key = 'product_id'
   )
 }}
@@ -14,12 +14,12 @@ with source as (
 renamed as (
 
     select
-        product_id,
-        inventory,
-        price,
-        name,
-        _fivetran_deleted,
-        _fivetran_synced
+        trim(product_id) as product_id
+        , inventory
+        , price as price_USD
+        , name
+        , _fivetran_deleted
+        , _fivetran_synced
 
     from source
 

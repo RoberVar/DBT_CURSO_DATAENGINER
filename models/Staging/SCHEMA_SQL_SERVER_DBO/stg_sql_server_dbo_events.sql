@@ -1,6 +1,6 @@
 {{
   config(
-     materialized='incremental',
+     materialized='view',
      unique_key = 'event_id'
   )
 }}
@@ -12,16 +12,16 @@ WITH src_events AS (
 
 renamed_casted AS (
     SELECT
-         event_id
-        ,page_url
-        ,event_type
-        ,user_id
-        ,product_id
-        ,session_id
-        ,created_at
-        ,order_id
-        ,_fivetran_deleted
-        ,_fivetran_synced
+         trim(event_id) as event_id
+        , page_url
+        , event_type
+        , trim(user_id) as user_id
+        , trim(product_id) as product_id
+        , trim(session_id) as session_id
+        , created_at::timestamp_ltz as created_at
+        , trim(order_id) as order_id
+        , _fivetran_deleted
+        , _fivetran_synced
     FROM src_events
     )
 
