@@ -13,40 +13,52 @@ models:
     columns:
       - name: user_id
         description: "UUID for the user"
-
+        tests:
+        - not_null
       - name: address_id
         description: "Identifier for the address"
-    
+        tests:
+        - not_null    
       - name: name
         description: "Concatenated field of first name and last name of the user"
-
+        tests:
+        - not_null
       - name: address
         description: "Name of the street and number where de user lives"
-
+        tests:
+        - not_null
       - name: phone_number
         description: "Phone number of the user"
-
+        tests:
+        - not_null
       - name: email
         description: "Email of the user"
-
+        tests:
+        - not_null
       - name: country
         description: "Country where the user lives"
-
+        tests:
+        - not_null
       - name: state
         description: "State where de user lives"
-
+        tests:
+        - not_null
       - name: zipcode
         description: "Zipcode of the address where the user lives"
-
+        tests:
+        - not_null
       - name: user_created_at
         description: "Date when the user was created"
-
+        tests:
+        - not_null
       - name: user_updated_at
         description: "Date when the data of the user was updated"
 
       - name: user_without_update
         description: "Days without been updated the user"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: user_ft_synced
         description: "Date value that shows the last info updated of the user"
 
@@ -60,13 +72,19 @@ models:
     columns:
       - name: user_id
         description: "UUID of every user"
-
+        tests:
+        - unique
+        - not_null
       - name: orders_by_user
         description: "Amount of orders ask by a user"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: total_user_cost_usd
         description: "Total cost spent by a user"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: last_ordered
         description: "Last order ask by a user"
 
@@ -86,24 +104,36 @@ models:
     columns:
       - name: product_id
         description: "UUID of every product"
-
+        tests:
+        - unique
+        - not_null
       - name: name
         description: "Name of the product"
-
+        tests:
+        - not_null
       - name: price_usd
         description: "Price of the product"
-    
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: inventory
         description: "Amount left on the warehouse of that product"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: yearmonth
         description: "Date when the order asking by the product was made"
 
       - name: sold_quantity
         description: "Quantity sold of that product"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: earn_by_product_usd
         description: "Quantity earn by that product"
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
 
 #####Events functions intermediate table#####
 
@@ -112,37 +142,50 @@ models:
     columns:
       - name: user_id
         description: "Identifier of the user"
-
+        tests:
+        - not_null
       - name: page_view_amount
         description: "Column wich keeps how mane time a user has made the event with the name of the column"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: checkout_amount
         description: "Column wich keeps how mane time a user has made the event with the name of the column"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: package_shipped_amount
         description: "Column wich keeps how mane time a user has made the event with the name of the column"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: add_to_cart_amount
         description: "Column wich keeps how mane time a user has made the event with the name of the column"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: product_id
         description: "Id of the product that is being view on the internet"
 
       - name: page_url
         description: "URL of the product's webpage"
-
+        tests:
+        - not_null
       - name: event_type
         description: "Description of the event on the web, as it could be add to cart, check out..."
-
+        tests:
+        - not_null
       - name: event_id
         description: "UUID for the event"
-
+        tests:
+        - not_null
       - name: order_id
         description: "Identifier of the order of the product"
 
       - name: session_id
         description: "Identifier of the session wich user logs in"
-
+        tests:
+        - not_null
       - name: yearmonth
         description: "Identifier of the date where the event has occurred"
 
@@ -156,22 +199,31 @@ models:
     columns:
       - name: order_id
         description: "Identifier of the order wich contains the product"
-
+        tests:
+        - not_null
       - name: product_id
         description: "Identifier of the product wich is in the order"
-
+        tests:
+        - not_null
       - name: name
         description: "Name of the product"
-
+        tests:
+        - not_null
       - name: inventory
         description: "Amount remaining in the warehouse"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: price_usd
         description: "Price in United State Dollars of the product"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: quantity
         description: "Quantity sold in every order of the product"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: products_ft_synced
         description: "Date value that shows the last info update of the row by product"
 
