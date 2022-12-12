@@ -181,7 +181,7 @@ sources:
             tests:
             - not_null
             - relationships:
-                to: source('sql_server_dbo','address')
+                to: source('sql_server_dbo','addresses')
                 field: address_id              
           - name: status
             description: "Value that shows the order status, prepared, delivered, shipped..."

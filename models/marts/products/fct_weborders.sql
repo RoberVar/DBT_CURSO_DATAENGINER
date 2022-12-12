@@ -32,7 +32,7 @@ renamed_casted AS (
         , e._fivetran_synced as event_ft_synced
 
     from int_events_functions e
-    left join int_order_items_products_functions oip
+    left join fct_weborders oip
     on e.product_id = oip.product_id
     )
 
