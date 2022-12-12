@@ -74,7 +74,7 @@ models:
       sql_server_dbo:
         +schema: sql_server_dbo
       
-    Marts:
+    marts:
       +materialized: table
       +database: |  
         {%- if  target.name == 'user_dev' -%} dev_gold_db_alumno15
@@ -82,14 +82,14 @@ models:
         {%- elif target.name == 'pro'-%} pro_gold_db_alumno15
         {%- else -%} {{target.database}}_gold_db_alumno_15
         {%- endif -%}
-      Core:
-        +schema: Core
+      core:
+        +schema: core
       customers:
         +schema: customers
       finances:
         +schema: finances
-      Intermediate:
-        +schema: Intermediate
+      intermediate:
+        +schema: intermediate
       products:
         +schema: products
       
