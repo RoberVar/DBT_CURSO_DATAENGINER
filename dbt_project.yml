@@ -38,9 +38,9 @@ models:
     staging:
       +materialized: view
       +database: |  
-        {%- if  target.name == 'user_dev' -%} dev_silver_db_alumno15 
+        {%- if  target.name == 'user_dev' -%} dev_silver_db_alumno15
         {%- elif target.name == 'ci' -%} dev_silver_db_alumno15
-        {%- elif target.name == 'pro'-%} pro_silver_db_alumno15  
+        {%- elif target.name == 'pro'-%} pro_silver_db_alumno15
         {%- else -%} {{target.database}}_silver_db_alumno15
         {%- endif -%}
       google_sheets:
@@ -51,9 +51,9 @@ models:
     marts:
       +materialized: table
       +database: |  
-        {%- if  target.name == 'user_dev' -%} dev_gold_db_alumno15  
-        {%- elif target.name == 'ci' -%} dev_gold_db_alumno15 
-        {%- elif target.name == 'pro'-%} pro_gold_db_alumno15 
+        {%- if  target.name == 'user_dev' -%} dev_gold_db_alumno15
+        {%- elif target.name == 'ci' -%} dev_gold_db_alumno15
+        {%- elif target.name == 'pro'-%} pro_gold_db_alumno15
         {%- else -%} {{target.database}}_gold_db_alumno15
         {%- endif -%}
       core:
@@ -69,9 +69,9 @@ snapshots:
   +sql_header: "alter session set timezone = 'Europe/Madrid';alter session set week_start = 7;"
   +transient: false
   +target_database: |  
-        {%- if  target.name == 'user_dev' -%} dev_silver_db_alumno15 
+        {%- if  target.name == 'user_dev' -%} dev_silver_db_alumno15
         {%- elif target.name == 'ci' -%} dev_silver_db_alumno15
-        {%- elif target.name == 'pro'-%} pro_silver_db_alumno15  
+        {%- elif target.name == 'pro'-%} pro_silver_db_alumno15
         {%- else -%} {{target.database}}_silver_db_alumno15
         {%- endif -%}
   +target_schema: snapshots
