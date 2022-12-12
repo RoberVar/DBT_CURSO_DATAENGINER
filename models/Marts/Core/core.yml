@@ -14,7 +14,7 @@ models:
     columns:
       - name: address_id
         description: "UUID for addresses"
-
+          
       - name: country
         description: "The country where the address is at"
 
