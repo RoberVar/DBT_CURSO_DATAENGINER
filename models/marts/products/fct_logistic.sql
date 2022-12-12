@@ -30,8 +30,8 @@ renamed_casted AS (
         , delivered_at
         , delivered_days
         , o._fivetran_synced as orders_ft_synced
-        , l.order_items_ft_synced
-        , l.products_ft_synced
+        , order_items_ft_synced
+        , products_ft_synced
 
     FROM fct_logistic l
     left join stg_orders o
@@ -43,7 +43,8 @@ SELECT * FROM renamed_casted
 
 {% if is_incremental() %}
 
-  where l.order_items_ft_synced > (select max(l.order_items_ft_synced) from {{ this }})
-  or l.products_ft_synced > (select max(l.products_ft_synced) from {{ this }})
+  where order_items_ft_synced > (select max(order_items_ft_synced) from {{ this }})
+  or products_ft_synced > (select max(products_ft_synced) from {{ this }})
+  or orders_ft_synced > (select max(orders_ft_synced) from {{ this }})
 
 {% endif %}
