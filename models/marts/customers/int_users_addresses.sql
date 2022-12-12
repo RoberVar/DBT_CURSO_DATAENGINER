@@ -32,7 +32,7 @@ renamed_casted AS (
         , a._fivetran_synced as address_ft_synced
 
     FROM int_users_addresses a
-    left join stg_sql_server_dbo_users u
+    left join stg_users u
     on a.address_id = u.address_id
     where user_id is not null
     and u._fivetran_deleted = false

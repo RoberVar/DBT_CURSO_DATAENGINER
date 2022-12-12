@@ -18,7 +18,7 @@ renamed_casted AS (
         ,address
         ,_fivetran_deleted
         ,_fivetran_synced
-    FROM stg_sql_server_dbo_addresses
+    FROM dim_addresses
     )
 
 SELECT * FROM renamed_casted

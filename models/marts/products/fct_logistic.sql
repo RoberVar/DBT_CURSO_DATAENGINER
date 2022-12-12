@@ -43,7 +43,7 @@ SELECT * FROM renamed_casted
 
 {% if is_incremental() %}
 
-  where l.order_items_ft_synced > (select max(l.order_items_ft_synced) from {{ this }}
+  where l.order_items_ft_synced > (select max(l.order_items_ft_synced) from {{ this }})
   or l.products_ft_synced > (select max(l.products_ft_synced) from {{ this }})
 
 {% endif %}
