@@ -14,19 +14,25 @@ models:
     columns:
       - name: address_id
         description: "UUID for addresses"
-          
+        tests:
+        - unique
+        - not_null
       - name: country
         description: "The country where the address is at"
-
+        tests:
+        - not_null
       - name: state
         description: "The state where the address is at"
-
+        tests:
+        - not_null
       - name: zipcode
         description: "The Zip Code where the address is at"
-
+        tests:
+        - not_null
       - name: address
         description: "Name of the address, contains street and number"
-
+        tests:
+        - not_null
       - name: _fivetran_deleted
         description: "Boolean value that shows if row's data is still valid"
 
@@ -40,25 +46,32 @@ models:
     columns:
       - name: event_id
         description: "UUID for every event on the web"
-
+        tests:
+        - unique
+        - not_null
       - name: page_url
         description: "The URL of the webpage that the user has visited"
-
+        tests:
+        - not_null
       - name: event_type
         description: "Description of the event on the web, as it could be add to cart, check out..."
-
+        tests:
+        - not_null
       - name: user_id
         description: "Identifier of the user who make the event"
-
+        tests:
+        - not_null
       - name: product_id
         description: "Identifier of the product that the user is looking for"
 
       - name: session_id
         description: "Identifier of the sesion that the user has started"
-
+        tests:
+        - not_null
       - name: created_at
         description: "Time when the event was created timestamped at Local Time Zone"
-
+        tests:
+        - not_null
       - name: order_id
         description: "Identifier of the order when the product has been sold"
 
@@ -75,13 +88,17 @@ models:
     columns:
       - name: order_id
         description: "Identifier for every order"
-
+        tests:
+        - not_null
       - name: product_id
         description: "Identifier for the product that has been sold in the order"
-
+        tests:
+        - not_null
       - name: quantity
         description: "Amount the product sold in the order"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: _fivetran_deleted
         description: "Boolean value that shows if row's data is still valid"
         tests:
@@ -96,19 +113,24 @@ models:
     columns:
       - name: order_id
         description: "UUID for every order"
-
+        tests:
+        - unique
+        - not_null
       - name: delivered_at
         description: "Date when the product arrives to the customer timestamped at Local Time Zone"
 
       - name: order_cost_usd
         description: "Cost of the order without the shipping cost in United State Dollars"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: shipping_service
         description: "Name of the company that deliver the products sold"
 
       - name: promo_id
         description: "Identifier of the promotions that could be applied to a order"
-
+        tests:
+        - not_null
       - name: estimated_delivery_at
         description: "Date estimated when the user is going to receive the package timestamped at Local Time Zone"
 
@@ -117,25 +139,34 @@ models:
 
       - name: shipping_cost_usd
         description: "Cost of the shipping service in United State Dollars"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: address_id
         description: "Identifier of the address where the package is going to be sent or has been sent"
-
+        tests:
+        - not_null
       - name: status
         description: "Value that shows the order status, prepared, delivered, shipped..."
-
+        tests:
+        - accepted_values:
+            values: ['delivered','preparing','shipped']
       - name: created_at
         description: "Date when the order is applied"
-
+        tests:
+        - not_null
       - name: total_cost_usd
         description: "Total cost of the order, it is the cost of the products, the shipping service, and if it has one, the discount of the promotion"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: delivered_days
         description: "Days that the package take to be delivered"
 
       - name: user_id
         description: "Identifier of the user that apply for the order"
-
+        tests:
+        - not_null
       - name: _fivetran_deleted
         description: "Boolean value that shows if row's data is still valid"
 
@@ -149,16 +180,23 @@ models:
     columns:
       - name: product_id
         description: "UUID of every product"
-
+        tests:
+        - unique
+        - not_null
       - name: inventory
         description: "Amount remaining in the warehouse of every product"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: price_usd
         description: "Price of every product in United State Dollars"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: name
         description: "Name of the product"
-
+        tests:
+        - not_null
       - name: _fivetran_deleted
         description: "Boolean value that shows if row's data is still valid"
 
@@ -172,31 +210,41 @@ models:
     columns:
       - name: user_id
         description: "UUID for every user"
-
+        tests:
+        - unique
+        - not_null
       - name: first_name
         description: "First name of the user"
-
+        tests:
+        - not_null
       - name: last_name
         description: "Last name of the user"
-
+        tests:
+        - not_null
       - name: email
         description: "Email of the user"
-
+        tests:
+        - not_null
       - name: phone_number
         description: "Phone number of the user"
-
+        tests:
+        - not_null
       - name: created_at
         description: "Date when the user was inserted in the database timestamped at Local Time Zone"
-
+        tests:
+        - not_null
       - name: updated_at
         description: "Last date when the user was modified timestamped at Local Time Zone"
 
       - name: address_id
         description: "Identifier of the address where the user lives in"
-
+        tests:
+        - not_null
       - name: without_update
         description: "Time in days that the user has been without been updated"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: _fivetran_deleted
         description: "Boolean value that shows if row's data is still valid"
 
@@ -210,16 +258,23 @@ models:
     columns:
       - name: promo_id
         description: "UUID for every promo"
-
+        tests:
+        - unique
+        - not_null
       - name: description
         description: "Name of the promotion"
-
+        tests:
+        - not_null
       - name: discount
         description: "Amount that is going to be discounted for every order"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: status
         description: "It could be active or inactive, depends on the promo"
-
+        tests:
+        - accepted_values:
+            values: ['active','inactive']
       - name: _fivetran_deleted
         description: "Boolean value that shows if row's data is still valid"
 
@@ -233,16 +288,22 @@ models:
     columns:
       - name: budget_id
         description: "UUID for every budget"
-
+        tests:
+        - unique
+        - not_null
       - name: budget_yearmonth
         description: "Identifier of the date of the budget"
-
+        tests:
+        - not_null
       - name: quantity
         description: "Amount of products considered that are going to be sold"
-
+        tests:
+        - dbt_utils.expression_is_true:
+            expression: ">= 0"
       - name: product_id
         description: "Identifier of every product in the budget"
-
+        tests:
+        - not_null
       - name: _fivetran_deleted
         description: "Boolean value that shows if row's data is still valid"
         tests:
