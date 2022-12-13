@@ -259,7 +259,6 @@ models:
       - name: promo_id
         description: "UUID for every promo"
         tests:
-        - unique
         - not_null
       - name: description
         description: "Name of the promotion"
